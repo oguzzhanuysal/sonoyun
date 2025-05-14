@@ -161,6 +161,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if (checkCollision(newRect, targetRect)) {
             heart.classList.remove('hidden');
             message.classList.remove('hidden');
+            setTimeout(() => {
+                const next = window.location.href.includes('index.html') ? 'level2.html' : 'index.html';
+                window.location.href = next;
+            }, 2000);
         }
+        
     });
 });
