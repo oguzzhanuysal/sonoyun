@@ -158,14 +158,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
             right: 800,
             bottom: 600
         };
-        if (checkCollision(newRect, targetRect)) {
-            heart.classList.remove('hidden');
-            message.classList.remove('hidden');
-            setTimeout(() => {
-                const next = window.location.href.includes('index.html') ? 'level2.html' : 'index.html';
-                window.location.href = next;
-            }, 2000);
-        }
+   if (checkCollision(newRect, targetRect)) {
+    heart.classList.remove('hidden');
+    message.classList.remove('hidden');
+    setTimeout(() => {
+        const next = window.location.pathname.includes('level2.html') ? 'index.html' : 'level2.html';
+        window.location.href = next;
+    }, 2000);
+}
+
         
     });
 });
