@@ -1,0 +1,96 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+#game-container {
+    width: 800px;
+    height: 600px;
+    background: white;
+    border: 2px solid black;
+    position: relative;
+}
+
+#character, #target {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    background-size: cover;
+}
+
+#character {
+    background-image: url('prenses.png');
+    top: 0;
+    left: 0;
+}
+
+#target {
+    background-image: url('prens.png');
+    bottom: 0;
+    right: 0;
+}
+
+.wall {
+    background-color: gray;
+    position: absolute;
+}
+
+.obstacle {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+}
+
+.obstacle-type1 {
+    background-image: url('ejderha.png');
+    background-size: cover;
+}
+
+.obstacle-type2 {
+    background-image: url('tuzak.png');
+    background-size: cover;
+}
+
+.obstacle-type3 {
+    background-image: url('lav.png');
+    background-size: cover;
+}
+
+#heart {
+    font-size: 4rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: bounce 1s infinite;
+}
+
+#message {
+    font-size: 2rem;
+    color: red;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+#score {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.3); }
+}
