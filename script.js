@@ -158,14 +158,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
             right: 800,
             bottom: 600
         };
-   if (checkCollision(newRect, targetRect)) {
+if (checkCollision(newRect, targetRect)) {
     heart.classList.remove('hidden');
     message.classList.remove('hidden');
+
     setTimeout(() => {
-        const next = window.location.pathname.includes('level2.html') ? 'index.html' : 'level2.html';
+        const currentFile = window.location.pathname.split('/').pop();
+        const next = (currentFile === 'level2.html') ? 'index.html' : 'level2.html';
         window.location.href = next;
     }, 2000);
 }
+
 
         
     });
