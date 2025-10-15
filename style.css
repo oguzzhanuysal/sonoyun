@@ -4,15 +4,89 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
+    background: radial-gradient(circle at top, #e9f6ff 0%, #c3e0f7 45%, #8fb1d0 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #1b2a3b;
 }
 
 #game-container {
     width: 800px;
     height: 600px;
-    background: white;
-    border: 2px solid black;
+    background: linear-gradient(180deg, rgba(248, 251, 255, 0.9) 0%, rgba(210, 230, 250, 0.95) 45%, rgba(168, 204, 236, 0.98) 100%);
+    border: 3px solid rgba(27, 42, 59, 0.35);
+    border-radius: 18px;
+    box-shadow: 0 25px 60px rgba(15, 36, 64, 0.35);
+    overflow: hidden;
     position: relative;
+    backdrop-filter: blur(4px);
+}
+
+#game-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.45), transparent 55%),
+                radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.3), transparent 60%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(27, 42, 59, 0.1));
+    pointer-events: none;
+    z-index: 1;
+}
+
+#game-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.05),
+        rgba(255, 255, 255, 0.05) 12px,
+        rgba(27, 42, 59, 0.05) 12px,
+        rgba(27, 42, 59, 0.05) 24px
+    );
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+    z-index: 1;
+}
+
+#hud {
+    position: absolute;
+    top: 14px;
+    left: 20px;
+    z-index: 3;
+    display: flex;
+    gap: 18px;
+    padding: 10px 14px;
+    background: rgba(15, 36, 64, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 12px 25px rgba(15, 36, 64, 0.2);
+    border-radius: 12px;
+    backdrop-filter: blur(6px);
+    color: #f9fbff;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+#hud span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#hud span::before {
+    content: attr(data-icon);
+    font-size: 1.1rem;
+}
+
+#hud #score::before {
+    content: '\1F3AF';
+}
+
+#hud #lives::before {
+    content: '\2764';
+}
+
+#hud #time::before {
+    content: '\23F1';
 }
 
 #character, #target {
@@ -20,44 +94,57 @@ body {
     height: 50px;
     position: absolute;
     background-size: cover;
+    z-index: 2;
 }
 
 #character {
     background-image: url('prenses.png');
     top: 0;
     left: 0;
+    transition: top 0.12s linear, left 0.12s linear;
+    filter: drop-shadow(0 14px 12px rgba(24, 40, 64, 0.35));
 }
 
 #target {
     background-image: url('prens.png');
     bottom: 0;
     right: 0;
+    animation: pulse 2.2s ease-in-out infinite;
+    filter: drop-shadow(0 10px 18px rgba(24, 40, 64, 0.25));
 }
 
 .wall {
-    background-color: gray;
+    background: linear-gradient(135deg, #3e4e5c 0%, #303d49 50%, #1f2830 100%);
+    border-radius: 6px;
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.4);
     position: absolute;
+    z-index: 2;
 }
 
 .obstacle {
     width: 50px;
     height: 50px;
     position: absolute;
+    filter: drop-shadow(0 12px 18px rgba(15, 36, 64, 0.4));
+    z-index: 2;
 }
 
 .obstacle-type1 {
     background-image: url('ejderha.png');
     background-size: cover;
+    animation: enemy-hover 3s ease-in-out infinite;
 }
 
 .obstacle-type2 {
     background-image: url('tuzak.png');
     background-size: cover;
+    animation: enemy-hover 2.4s ease-in-out infinite reverse;
 }
 
 .obstacle-type3 {
     background-image: url('lav.png');
     background-size: cover;
+    animation: ember 1.8s linear infinite;
 }
 
 #heart {
@@ -67,30 +154,91 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     animation: bounce 1s infinite;
+    z-index: 4;
 }
 
 #message {
     font-size: 2rem;
-    color: red;
+    color: #e24263;
     position: absolute;
     top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-}
-
-#score {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-weight: bold;
+    z-index: 4;
+    text-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    white-space: pre-line;
 }
 
 .hidden {
     display: none;
 }
 
+.particle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 219, 0, 0.9) 0%, rgba(226, 101, 25, 0.9) 55%, rgba(176, 40, 18, 0.8) 100%);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.5);
+    z-index: 5;
+    transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+#character.hurt {
+    animation: flicker 0.4s linear 6;
+}
+
+#character.recovering {
+    opacity: 0.65;
+}
+
+#character.celebrate {
+    animation: celebrate 1.2s ease-in-out infinite;
+}
+
+#game-container.shake {
+    animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
 @keyframes bounce {
     0%, 100% { transform: translate(-50%, -50%) scale(1); }
     50% { transform: translate(-50%, -50%) scale(1.3); }
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+@keyframes flicker {
+    from { filter: drop-shadow(0 14px 12px rgba(255, 165, 0, 0.55)); }
+    to { filter: drop-shadow(0 14px 12px rgba(255, 255, 255, 0.35)); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(0, -6px, 0) scale(1.05); }
+}
+
+@keyframes celebrate {
+    0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+    30% { transform: translate3d(0, -8px, 0) scale(1.05) rotate(-5deg); }
+    70% { transform: translate3d(0, 6px, 0) scale(0.98) rotate(8deg); }
+    100% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+}
+
+@keyframes enemy-hover {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+@keyframes ember {
+    0% { filter: drop-shadow(0 0 10px rgba(255, 120, 30, 0.4)); }
+    50% { filter: drop-shadow(0 0 22px rgba(255, 60, 0, 0.7)); }
+    100% { filter: drop-shadow(0 0 10px rgba(255, 120, 30, 0.4)); }
 }
