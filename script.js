@@ -4,13 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const target = document.getElementById('target');
     const obstacles = Array.from(document.querySelectorAll('.obstacle'));
     const walls = Array.from(document.querySelectorAll('.wall'));
-    const traps = Array.from(document.querySelectorAll('.trap'));
     const heart = document.getElementById('heart');
     const message = document.getElementById('message');
     const scoreElement = document.getElementById('score');
     const livesElement = document.getElementById('lives');
     const timeElement = document.getElementById('time');
-    const levelElement = document.getElementById('level');
 
     if (!container || !character || !target) {
         return;
@@ -35,14 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startTime = performance.now();
     const originalMessage = message ? message.textContent : '';
 
-    const levelOrder = ['index.html', 'level2.html', 'level3.html', 'level4.html', 'level5.html'];
-    const currentFile = (() => {
-        const pathName = window.location.pathname.split('/').pop();
-        return pathName && pathName.length ? pathName : 'index.html';
-    })();
-    const currentLevelIndex = Math.max(0, levelOrder.indexOf(currentFile));
-    const levelSpeedBoost = parseFloat(container?.dataset?.speedBoost ?? '0');
-    const speed = 220 + levelSpeedBoost;
+    const speed = 220;
     const keys = {
         ArrowUp: false,
         ArrowDown: false,
@@ -64,25 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
             bottom: top + height
         };
     });
-
-    const trapStates = traps.map(trap => {
-        const style = window.getComputedStyle(trap);
-        const top = parseFloat(style.top);
-        const left = parseFloat(style.left);
-        const width = parseFloat(style.width);
-        const height = parseFloat(style.height);
-        return {
-            element: trap,
-            top,
-            left,
-            width,
-            height,
-            right: left + width,
-            bottom: top + height
-        };
-    });
-
-    const difficultyMultiplier = 1 + currentLevelIndex * 0.18;
 
     const obstacleStates = obstacles.map(obstacle => {
         const style = window.getComputedStyle(obstacle);
@@ -111,8 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (obstacle.classList.contains('obstacle-type1')) {
             state.speed = 140;
         }
-
-        state.speed *= difficultyMultiplier;
 
         return state;
     });
@@ -230,8 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function detectCollisions(rect, { ignoreDanger = false } = {}) {
         const collision = {
             solid: false,
-            danger: false,
-            traps: []
+            danger: false
         };
 
         obstacleStates.forEach(state => {
@@ -247,13 +216,6 @@ document.addEventListener('DOMContentLoaded', () => {
         wallRects.forEach(wallRect => {
             if (checkCollision(rect, wallRect)) {
                 collision.solid = true;
-            }
-        });
-
-        trapStates.forEach(trap => {
-            if (checkCollision(rect, trap)) {
-                collision.danger = true;
-                collision.traps.push(trap.element);
             }
         });
 
@@ -399,10 +361,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const collision = detectCollisions(candidateRect, { ignoreDanger: recovering });
 
         if (collision.danger && !recovering) {
-            collision.traps.forEach(trap => {
-                trap.classList.add('revealed');
-                setTimeout(() => trap.classList.remove('revealed'), 1600);
-            });
             handleDanger();
             return;
         }
@@ -440,13 +398,11 @@ document.addEventListener('DOMContentLoaded', () => {
             message.classList.remove('hidden');
         }
 
-        const hasNextLevel = currentLevelIndex >= 0 && currentLevelIndex < levelOrder.length - 1;
-        const nextLevel = hasNextLevel ? levelOrder[currentLevelIndex + 1] : levelOrder[0];
-        const redirectDelay = hasNextLevel ? 2800 : 3800;
-
         setTimeout(() => {
-            window.location.href = nextLevel;
-        }, redirectDelay);
+            const currentFile = window.location.pathname.split('/').pop();
+            const next = currentFile === 'level2.html' ? 'index.html' : 'level2.html';
+            window.location.href = next;
+        }, 2600);
     }
 
     function gameLoop(timestamp) {
@@ -487,10 +443,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('keydown', onKeyDown);
     document.addEventListener('keyup', onKeyUp);
-
-    if (levelElement && currentLevelIndex >= 0) {
-        levelElement.textContent = `Seviye: ${currentLevelIndex + 1}`;
-    }
 
     resetCharacterPosition();
     updateHud();
