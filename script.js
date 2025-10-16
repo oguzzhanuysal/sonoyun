@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     const characterSize = character.offsetWidth;
     const startRect = getRect(character);
+    const levelSequence = ['index.html', 'level2.html', 'level3.html', 'level4.html', 'level5.html'];
+    const currentFile = window.location.pathname.split('/').pop() || 'index.html';
 
     let characterPosition = { x: startRect.left, y: startRect.top };
     let lastFrameTime = performance.now();
@@ -33,7 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const startTime = performance.now();
     const originalMessage = message ? message.textContent : '';
 
-    const speed = 220;
+    const baseSpeed = 220;
+    const rawSpeedBoost = Number(container.dataset.speedBoost);
+    const speed = baseSpeed + (Number.isFinite(rawSpeedBoost) ? rawSpeedBoost : 0);
     const keys = {
         ArrowUp: false,
         ArrowDown: false,
@@ -399,9 +403,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         setTimeout(() => {
-            const currentFile = window.location.pathname.split('/').pop();
-            const next = currentFile === 'level2.html' ? 'index.html' : 'level2.html';
-            window.location.href = next;
+            const currentIndex = levelSequence.indexOf(currentFile);
+            const hasNextLevel = currentIndex > -1 && currentIndex < levelSequence.length - 1;
+            if (hasNextLevel) {
+                window.location.href = levelSequence[currentIndex + 1];
+            }
         }, 2600);
     }
 
