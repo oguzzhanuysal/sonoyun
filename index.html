@@ -8,18 +8,31 @@
 <body>
   <div id="game-container">
     <div id="hud">
+      <span id="level">Seviye: 1</span>
       <span id="score">Puan: 0</span>
       <span id="lives">Can: 3</span>
       <span id="time">Süre: 00:00</span>
     </div>
-    <div id="character"></div>
-    <div id="target"></div>
-    <!-- Engeller -->
-    <div class="obstacle obstacle-type1" style="top:50px; left:100px;"></div>
-    <div class="obstacle obstacle-type2" style="top:250px; left:300px;"></div>
-    <div class="wall" style="top:100px; left:400px; width:200px; height:20px;"></div>
+    <div id="character" style="top:452px; left:60px;"></div>
+    <div id="target" style="top:120px; left:700px;"></div>
+
+    <!-- Labirent duvarları -->
+    <div class="wall" style="top:60px; left:40px; width:720px; height:16px;"></div>
+    <div class="wall" style="top:60px; left:40px; width:16px; height:476px;"></div>
+    <div class="wall" style="top:520px; left:40px; width:720px; height:16px;"></div>
+    <div class="wall" style="top:60px; left:744px; width:16px; height:476px;"></div>
+
+    <div class="wall" style="top:320px; left:120px; width:400px; height:16px;"></div>
+    <div class="wall" style="top:180px; left:320px; width:16px; height:220px;"></div>
+
+    <!-- Hareketli engeller -->
+    <div class="obstacle obstacle-type1" style="top:420px; left:300px;"></div>
+
+    <!-- Gizli tuzaklar -->
+    <div class="trap" style="top:220px; left:520px; width:40px; height:40px;"></div>
+
     <div id="heart" class="hidden">❤️</div>
-    <div id="message" class="hidden">Level 1 bitti! Level 2 başlıyor</div>
+    <div id="message" class="hidden">Level 1 tamam! Labirent daha da zorlaşacak.</div>
   </div>
   <script src="script.js"></script>
 </body>

@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const target = document.getElementById('target');
     const obstacles = Array.from(document.querySelectorAll('.obstacle'));
     const walls = Array.from(document.querySelectorAll('.wall'));
+    const traps = Array.from(document.querySelectorAll('.trap'));
     const heart = document.getElementById('heart');
     const message = document.getElementById('message');
     const scoreElement = document.getElementById('score');
@@ -89,6 +90,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         return state;
+    });
+
+    const trapStates = traps.map(trap => {
+        const style = window.getComputedStyle(trap);
+        const top = parseFloat(style.top);
+        const left = parseFloat(style.left);
+        const width = trap.offsetWidth || parseFloat(style.width) || 0;
+        const height = trap.offsetHeight || parseFloat(style.height) || 0;
+        return {
+            element: trap,
+            top,
+            left,
+            right: left + width,
+            bottom: top + height,
+            hideTimeout: null
+        };
     });
 
     function getRect(element) {
@@ -201,6 +218,23 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => container.classList.remove('shake'), 500);
     }
 
+    function revealTrap(trapState) {
+        if (!trapState || !trapState.element) {
+            return;
+        }
+
+        trapState.element.classList.add('revealed');
+
+        if (trapState.hideTimeout) {
+            clearTimeout(trapState.hideTimeout);
+        }
+
+        trapState.hideTimeout = setTimeout(() => {
+            trapState.element.classList.remove('revealed');
+            trapState.hideTimeout = null;
+        }, 900);
+    }
+
     function detectCollisions(rect, { ignoreDanger = false } = {}) {
         const collision = {
             solid: false,
@@ -220,6 +254,13 @@ document.addEventListener('DOMContentLoaded', () => {
         wallRects.forEach(wallRect => {
             if (checkCollision(rect, wallRect)) {
                 collision.solid = true;
+            }
+        });
+
+        trapStates.forEach(trapState => {
+            if (checkCollision(rect, trapState)) {
+                collision.danger = true;
+                revealTrap(trapState);
             }
         });
 
