@@ -147,6 +147,23 @@ body {
     animation: ember 1.8s linear infinite;
 }
 
+.trap {
+    position: absolute;
+    border-radius: 14px;
+    background: radial-gradient(circle at center, rgba(244, 102, 110, 0.28) 0%, rgba(166, 36, 52, 0.28) 65%, rgba(116, 20, 34, 0.22) 100%);
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.trap.revealed {
+    opacity: 0.85;
+    transform: scale(1.12);
+    box-shadow: 0 0 28px rgba(226, 50, 78, 0.55);
+}
+
 #heart {
     font-size: 4rem;
     position: absolute;
