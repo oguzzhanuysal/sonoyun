@@ -6,19 +6,45 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="game-container">
+  <div id="game-container" data-speed-boost="20">
     <div id="hud">
+      <span id="level">Seviye: 2</span>
       <span id="score">Puan: 0</span>
       <span id="lives">Can: 3</span>
       <span id="time">Süre: 00:00</span>
     </div>
-    <div id="character"></div>
-    <div id="target"></div>
-    <!-- Yeni engeller -->
-    <div class="obstacle obstacle-type3" style="top:100px; left:150px;"></div>
-    <div class="wall" style="top:150px; left:100px; width:600px; height:20px;"></div>
+    <div id="character" style="top:456px; left:80px;"></div>
+    <div id="target" style="top:80px; left:700px;"></div>
+
+    <!-- Labirent duvarları -->
+    <div class="wall" style="top:70px; left:40px; width:720px; height:14px;"></div>
+    <div class="wall" style="top:70px; left:40px; width:14px; height:470px;"></div>
+    <div class="wall" style="top:520px; left:40px; width:720px; height:14px;"></div>
+    <div class="wall" style="top:70px; left:746px; width:14px; height:470px;"></div>
+
+    <div class="wall" style="top:180px; left:40px; width:520px; height:16px;"></div>
+    <div class="wall" style="top:260px; left:40px; width:220px; height:16px;"></div>
+    <div class="wall" style="top:260px; left:480px; width:280px; height:16px;"></div>
+    <div class="wall" style="top:340px; left:120px; width:520px; height:16px;"></div>
+
+    <div class="wall" style="top:260px; left:260px; width:16px; height:200px;"></div>
+    <div class="wall" style="top:180px; left:520px; width:16px; height:200px;"></div>
+
+    <!-- Hareketli engeller -->
+    <div class="obstacle obstacle-type1" style="top:472px; left:200px;"></div>
+    <div class="obstacle obstacle-type1" style="top:284px; left:620px;"></div>
+    <div class="obstacle obstacle-type2" style="top:232px; left:360px;"></div>
+    <div class="obstacle obstacle-type2" style="top:208px; left:560px;"></div>
+    <div class="obstacle obstacle-type3" style="top:140px; left:640px;"></div>
+
+    <!-- Gizli tuzaklar -->
+    <div class="trap" style="top:460px; left:140px; width:52px; height:52px;"></div>
+    <div class="trap" style="top:280px; left:620px; width:48px; height:48px;"></div>
+    <div class="trap" style="top:200px; left:660px; width:48px; height:48px;"></div>
+    <div class="trap" style="top:120px; left:420px; width:48px; height:48px;"></div>
+
     <div id="heart" class="hidden">❤️</div>
-    <div id="message" class="hidden">Tebrikler Çisem! Level 2 de tamam</div>
+    <div id="message" class="hidden">Harika! Level 2 bitti, sırada daha çetin Level 3 var.</div>
   </div>
   <script src="script.js"></script>
 </body>
